@@ -94,7 +94,23 @@ const Auth = () => {
             toast.error(error.message);
           }
         } else {
-          toast.success("Account created! You can now login.");
+          // Try to sign the user in immediately after signup to improve
+          // developer/local experience (some Supabase setups auto-confirm and
+          // return a session on signup).
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+          if (!signInError && signInData?.session) {
+            toast.success("Welcome! You're signed in.");
+            navigate("/");
+            return;
+          }
+
+          // If immediate sign-in didn't work, inform the user to confirm email
+          // or log in manually. This covers cases where email confirmation is required.
+          toast.success("Account created! Check your email to confirm, then log in.");
           setIsLogin(true); // Switch to login mode
         }
       }

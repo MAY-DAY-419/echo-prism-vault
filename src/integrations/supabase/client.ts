@@ -2,8 +2,12 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = "https://lsvjmpymvangmeskwbwd.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzdmptcHltdmFuZ21lc2t3YndkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMTMyODAsImV4cCI6MjA3NzU4OTI4MH0.NtmcaWCeaOg24v4vFNnUrvNm2DEilVlA7A0gHwe__2o";
+// Prefer environment variables for keys in development.
+// Create a `.env.local` at the project root with the variables below (see `.env.example`).
+// Vite exposes env vars prefixed with VITE_ via import.meta.env
+
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL as string) || "https://lsvjmpymvangmeskwbwd.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzdmptcHltdmFuZ21lc2t3YndkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMTMyODAsImV4cCI6MjA3NzU4OTI4MH0.NtmcaWCeaOg24v4vFNnUrvNm2DEilVlA7A0gHwe__2o";
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
