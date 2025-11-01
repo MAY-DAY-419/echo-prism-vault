@@ -74,7 +74,7 @@ const Auth = () => {
         const email = `${username}@echoverse.app`;
         const redirectUrl = `${window.location.origin}/`;
         
-        const { data, error } = await supabase.auth.signUp({
+        const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -88,24 +88,14 @@ const Auth = () => {
         if (error) {
           if (error.message.includes("already registered")) {
             toast.error("This username is already taken");
+          } else if (error.message.includes("rate limit")) {
+            toast.error("Too many signup attempts. Please wait a moment and try again.");
           } else {
             toast.error(error.message);
           }
-        } else if (data.user) {
-          // Create profile
-          const { error: profileError } = await supabase
-            .from("profiles")
-            .insert({
-              user_id: data.user.id,
-              username: username,
-            });
-
-          if (profileError) {
-            toast.error("Failed to create profile");
-          } else {
-            toast.success("Account created! Welcome to EchoVerse");
-            navigate("/");
-          }
+        } else {
+          toast.success("Account created! You can now login.");
+          setIsLogin(true); // Switch to login mode
         }
       }
     } catch (err) {
